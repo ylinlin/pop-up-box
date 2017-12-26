@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<input type="button" id="btn" value="点击">
+    <script>
+    function fn(obj){
+        this.obj=obj;
+        this.btn = document.getElementById(this.obj.btnId);
+        this.buttons = document.getElementsByTagName(this.obj.spanTagName);
+        this.add();
+    }
+    fn.prototype={
+        constructor:fn,
+        add:function(){
+            var that=this;
+            this.btn.onclick=function(){
+                var mark = document.createElement('div');
+                mark.id='mark';
+                document.body.appendChild(mark);
+                var box = document.createElement('div');
+                box.id='box';
+                box.innerHTML='<p>'+that.obj.content+'</p><button>'+that.obj.buttons[0]+'</button><button>'+that.obj.buttons[1]+'</button>';
+                document.body.appendChild(box);
+                that.bindclick();
+            }
+        },
+        bindclick:function(){
+            var that=this;
+            this.buttons[0].onclick=function(){
+                document.body.removeChild(mark);
+                document.body.removeChild(box);
+                that.obj.successCallback();
+            }
+            this.buttons[1].onclick=function(){
+                document.body.removeChild(mark);
+                document.body.removeChild(box);
+                that.obj.cancelCallback();
+            }
+        }
+    }
+    new fn({
+        btnId:'btn',
+        markId:'mark',
+        spanTagName:'button',
+        content:"是否登录百度？",
+        buttons:["确认","取消"],
+        successCallback:function(){
+            location.href='http://www.baidu.com'
+        },
+        cancelCallback:function(){
+            location.href=''
+        } 
+    })
+
+    </script>
+</body>
+</html>
